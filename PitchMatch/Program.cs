@@ -8,7 +8,7 @@ namespace PitchMatch
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            //hei
             builder.Services.AddCors();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
