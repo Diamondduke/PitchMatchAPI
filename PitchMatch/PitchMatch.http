@@ -1,0 +1,6 @@
+@PitchMatch_HostAddress = http://localhost:5058
+
+GET {{PitchMatch_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
