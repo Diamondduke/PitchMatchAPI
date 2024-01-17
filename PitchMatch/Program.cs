@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using PitchMatch.Data;
 
@@ -9,14 +8,14 @@ namespace PitchMatch
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<PitchMatchDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("PitchMatchConnection")));
 
-            // Add services to the container.
-
+            builder.Services.AddCors();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<PitchMatchDbContext>(opt =>
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("PitchMatchConnection")));
 
             var app = builder.Build();
 
@@ -27,11 +26,14 @@ namespace PitchMatch
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
-
+            app.UseCors(c =>
+            {
+                c
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin();
+            });
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();
