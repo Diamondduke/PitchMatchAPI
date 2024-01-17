@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using PitchMatch.Data;
+
 namespace PitchMatch
 {
     public class Program
@@ -6,6 +9,8 @@ namespace PitchMatch
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<PitchMatchDbContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("PitchMatchConnection")));
 
             // Add services to the container.
 
