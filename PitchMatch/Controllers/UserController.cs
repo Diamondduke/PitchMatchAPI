@@ -26,6 +26,17 @@ namespace PitchMatch.Controllers
             return Ok(user);
         }
 
+        [HttpGet("{id:int}/pitches")]
+        public async Task<IActionResult> GetPitches(int pitchId)
+        {
+            var pitch= await _db.Pitch.FindAsync(pitchId);
+            if(pitch == null)
+            {
+                return NotFound();
+            }
+            return Ok(pitch);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUser user)
         {
@@ -49,7 +60,6 @@ namespace PitchMatch.Controllers
             await _db.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new {id=newUser.Id},newUser);
         }
-
     }
 
     public class CreateUser
