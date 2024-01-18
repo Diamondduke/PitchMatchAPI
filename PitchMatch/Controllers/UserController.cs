@@ -34,11 +34,15 @@ namespace PitchMatch.Controllers
                 Name = user.Name,
                 Email = user.Email,
                 Password = user.Password,
-                Bio=user.Bio,
-                SoMe=user.SoMe,
-                ImgUrl=user.ImgUrl,
-                Contact=user.Contact,
-                CvUrl=user.CvUrl,
+                Bio = user.Bio,
+                SoMe = user.SoMe,
+                ImgUrl = user.ImgUrl,
+                Contact = user.Contact,
+                CvUrl = user.CvUrl,
+                PersonalData =
+                {
+                    IsVerified = false
+                }
             };
 
             _db.User.Add(newUser);
@@ -58,6 +62,7 @@ namespace PitchMatch.Controllers
         public string? SoMe { get; set; }
         public string? ImgUrl { get; set; }
         public string? CvUrl { get; set; }
+        public PersonalData? PersonalData { get; set; }
 
     }
 }
