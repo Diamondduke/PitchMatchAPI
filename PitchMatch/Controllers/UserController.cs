@@ -15,7 +15,7 @@ namespace PitchMatch.Controllers
             _db = db;
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet]
         public async Task<IActionResult> Get(int userId)
         {
             var user= await _db.User.FindAsync(userId);
@@ -24,17 +24,6 @@ namespace PitchMatch.Controllers
                 return NotFound();
             }
             return Ok(user);
-        }
-
-        [HttpGet("{id:int}/pitches")]
-        public async Task<IActionResult> GetPitches(int pitchId)
-        {
-            var pitch= await _db.Pitch.FindAsync(pitchId);
-            if(pitch == null)
-            {
-                return NotFound();
-            }
-            return Ok(pitch);
         }
 
         [HttpPost]
@@ -60,6 +49,38 @@ namespace PitchMatch.Controllers
             await _db.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new {id=newUser.Id},newUser);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(int id,UpdateUser user)
+        {
+            User? oldUser = await _db.User.FindAsync(id);
+            if(oldUser == null)
+            {
+                return NotFound();
+            }
+            oldUser.Name = user.Name;
+            oldUser.Password = user.Password;
+            oldUser.Bio = user.Bio;
+            oldUser.SoMe = user.SoMe;
+            oldUser.ImgUrl = user.ImgUrl;
+            oldUser.Contact = user.Contact;
+            oldUser.CvUrl = user.CvUrl;
+            await _db.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            User? user = await _db.User.FindAsync(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            _db.User.Remove(user);
+            await _db.SaveChangesAsync();
+            return Ok();
+        }   
     }
 
     public class CreateUser
@@ -74,4 +95,18 @@ namespace PitchMatch.Controllers
         public string? CvUrl { get; set; }
 
     }
+
+    public class UpdateUser
+    { 
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string? Bio { get; set; }
+        public string? Contact { get; set; }
+        public string? SoMe { get; set; }
+        public string? ImgUrl { get; set; }
+        public string? CvUrl { get; set; }
+
+    }
+
 }
