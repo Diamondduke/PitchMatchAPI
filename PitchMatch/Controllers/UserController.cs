@@ -27,7 +27,7 @@ namespace PitchMatch.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(User user)
+        public async Task<IActionResult> CreateUser(CreateUser user)
         {
             var newUser = new User
             {
@@ -38,12 +38,26 @@ namespace PitchMatch.Controllers
                 SoMe=user.SoMe,
                 ImgUrl=user.ImgUrl,
                 Contact=user.Contact,
+                CvUrl=user.CvUrl,
             };
 
             _db.User.Add(newUser);
             await _db.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new {id=newUser.Id},newUser);
         }
+
+    }
+
+    public class CreateUser
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string? Bio { get; set; }
+        public string? Contact { get; set; }
+        public string? SoMe { get; set; }
+        public string? ImgUrl { get; set; }
+        public string? CvUrl { get; set; }
 
     }
 }
