@@ -15,6 +15,7 @@ namespace PitchMatch.Data.Models
         public string? ImgUrl { get; set; }
         public string Location { get; set; } = string.Empty;
         public int Rating { get; set; }
+        public string? CvUrl { get; set; }
         public PersonalData? PersonalData { get; set; }
         public ICollection<Pitch>? Pitches { get; set; }
         public ICollection<Investment>? Investments { get; set; }
