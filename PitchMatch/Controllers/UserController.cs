@@ -7,7 +7,7 @@ using PitchMatch.Securituy;
 
 namespace PitchMatch.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
