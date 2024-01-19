@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PitchMatch.Data;
 using PitchMatch.Data.Models;
 
@@ -15,6 +16,13 @@ namespace PitchMatch.Controllers
         public PitchController(PitchMatchDbContext db)
         {
             _db = db;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPitches()
+        {
+            var pitches = await _db.Pitch.ToListAsync();
+            return Ok(pitches);
         }
 
         [HttpGet("{id:int}")]

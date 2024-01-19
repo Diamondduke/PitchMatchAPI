@@ -30,7 +30,7 @@ namespace PitchMatch
                  };
              });
             //Jwt configuration ends here
-            //hei
+         
             builder.Services.AddCors();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
