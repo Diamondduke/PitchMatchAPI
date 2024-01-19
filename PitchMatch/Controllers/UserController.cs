@@ -26,7 +26,7 @@ namespace PitchMatch.Controllers
             return Ok(users);
         }
 
-        [HttpGet]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int userId)
         {
             var user= await _db.User.FindAsync(userId);
