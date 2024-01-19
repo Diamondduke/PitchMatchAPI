@@ -27,11 +27,20 @@ namespace PitchMatch.Controllers
             //your logic for login process
             //If login username and password are correct then proceed to generate token
 
-            var user = _db.User.Where(u => u.Email.ToLower() == loginRequest.Email.ToLower() && u.Password == PasswordHasher.HashPassword(loginRequest.Password + u.Salt)).FirstOrDefault();
+            var user = _db.User.Where(u => u.Email.ToLower() == loginRequest.Email.ToLower()).FirstOrDefault();
 
-            if (user is null)
+            if (user is null) //Check if user with that email is found
             {
                 return Unauthorized();
+            }
+            else //if user is found, hash login request and check against user password
+            {
+                var hashedPassword = PasswordHasher.HashPassword(loginRequest.Password + user.Salt);
+
+                if (user.Password !=  hashedPassword)
+                {
+                    return Unauthorized();
+                }
             }
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
