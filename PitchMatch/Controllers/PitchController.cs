@@ -6,7 +6,7 @@ using PitchMatch.Data.Models;
 
 namespace PitchMatch.Controllers
 {
-    [Authorize]
+    
     [Route("/[controller]")]
     [ApiController]
     public class PitchController : ControllerBase
@@ -24,7 +24,7 @@ namespace PitchMatch.Controllers
             var pitches = await _db.Pitch.ToListAsync();
             return Ok(pitches);
         }
-
+        //[Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPitch(int pitchId)
         {
@@ -35,7 +35,7 @@ namespace PitchMatch.Controllers
             }
             return Ok(pitch);
         }
-
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePitch(CreatePitch pitch)
         {
@@ -57,7 +57,7 @@ namespace PitchMatch.Controllers
             await _db.SaveChangesAsync();
             return CreatedAtAction(nameof(GetPitch), new { id = newPitch.Id }, newPitch);
         }
-
+        //[Authorize]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdatePitch(int pitchId, CreatePitch pitch)
         {
@@ -80,6 +80,7 @@ namespace PitchMatch.Controllers
             await _db.SaveChangesAsync();
             return NoContent();
         }
+        //[Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletePitch(int pitchId)
         {
