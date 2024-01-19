@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PitchMatch.Data;
 using PitchMatch.Data.Models;
 using PitchMatch.Securituy;
@@ -17,9 +18,14 @@ namespace PitchMatch.Controllers
         {
             _db = db;
         }
-
         [HttpGet]
-        public async Task<IActionResult> Get(int userId)
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _db.User.ToListAsync();
+            return Ok(users);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUser(int userId)
         {
             var user= await _db.User.FindAsync(userId);
             if(user == null)
