@@ -104,27 +104,13 @@ namespace PitchMatch.Controllers
 
     public class CreateUser
     {
-        [Required]
-        [MinLength(3)]
-        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
-        [Required]
-        [MinLength(3)]
-        [MaxLength(100)]
         public string Email { get; set; } = string.Empty;
-        [Required]
-        [MinLength(6)]
-        [MaxLength(300)]
         public string Password { get; set; } = string.Empty;
-        [MaxLength(2000)]
         public string? Bio { get; set; }
-        [MaxLength(300)]
         public string? Contact { get; set; }
-        [MaxLength(300)]
         public string? SoMe { get; set; }
-        [MaxLength(300)]
         public string? ImgUrl { get; set; }
-        [MaxLength(300)]
         public string? CvUrl { get; set; }
 
     }
