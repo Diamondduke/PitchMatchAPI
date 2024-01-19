@@ -54,7 +54,11 @@ namespace PitchMatch.Controllers
 
             var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
 
-            return Ok(token);
+            return Ok(new { 
+            AccessToken=token,
+            ExpiresIn=Sectoken.ValidTo,
+            UserId=user.Id
+            });
         }
     }
 }
