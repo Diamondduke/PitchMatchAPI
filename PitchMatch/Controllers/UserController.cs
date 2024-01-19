@@ -55,7 +55,7 @@ namespace PitchMatch.Controllers
 
             _db.User.Add(newUser);
             await _db.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new {id=newUser.Id},newUser);
+            return CreatedAtAction(nameof(GetUser), new {id=newUser.Id},newUser);
         }
 
         [HttpPut]
