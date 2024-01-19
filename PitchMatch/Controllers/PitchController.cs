@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PitchMatch.Data;
 using PitchMatch.Data.Models;
 
 namespace PitchMatch.Controllers
 {
+    [Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class PitchController : ControllerBase
