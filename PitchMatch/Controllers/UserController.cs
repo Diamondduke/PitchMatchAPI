@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PitchMatch.Data;
 using PitchMatch.Data.Models;
+using PitchMatch.Securituy;
 
 namespace PitchMatch.Controllers
 {
@@ -37,19 +38,22 @@ namespace PitchMatch.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUser user)
         {
+            var generatedSalt = PasswordHasher.GenerateSalt();
+
             var newUser = new User
             {
                 Name = user.Name,
                 Email = user.Email,
-                Password = user.Password,
+                Salt = generatedSalt,
+                Password = PasswordHasher.HashPassword(user.Password + generatedSalt),
                 Bio = user.Bio,
                 SoMe = user.SoMe,
                 ImgUrl = user.ImgUrl,
                 Contact = user.Contact,
                 CvUrl = user.CvUrl,
-                PersonalData =null,
-                Pitches=null,
-                Investments=null,
+                PersonalData = null,
+                Pitches = null,
+                Investments = null,
                 Rating=0,
             };
 
@@ -62,12 +66,14 @@ namespace PitchMatch.Controllers
         public async Task<IActionResult> UpdateUser(int id,UpdateUser user)
         {
             User? oldUser = await _db.User.FindAsync(id);
+
             if(oldUser == null)
             {
                 return NotFound();
             }
+
             oldUser.Name = user.Name;
-            oldUser.Password = user.Password;
+            oldUser.Password = PasswordHasher.HashPassword(user.Password + oldUser.Salt);
             oldUser.Bio = user.Bio;
             oldUser.SoMe = user.SoMe;
             oldUser.ImgUrl = user.ImgUrl;
