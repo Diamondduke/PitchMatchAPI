@@ -6,7 +6,7 @@ using PitchMatch.Data.Models;
 
 namespace PitchMatch.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class PitchController : ControllerBase
