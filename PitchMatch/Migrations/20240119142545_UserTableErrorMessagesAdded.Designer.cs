@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PitchMatch.Data;
 
@@ -11,9 +12,11 @@ using PitchMatch.Data;
 namespace PitchMatch.Migrations
 {
     [DbContext(typeof(PitchMatchDbContext))]
-    partial class PitchMatchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240119142545_UserTableErrorMessagesAdded")]
+    partial class UserTableErrorMessagesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
