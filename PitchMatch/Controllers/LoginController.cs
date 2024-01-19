@@ -22,15 +22,15 @@ namespace PitchMatch.Controllers
         {
             //your logic for login process
             //If login username and password are correct then proceed to generate token
-            if (loginRequest.Username != user.Email && loginRequest.Password != user.Password)
+            if (loginRequest.Email != user.Email && loginRequest.Password != user.Password)
             {
                 return Unauthorized();
             }
-            if (loginRequest.Username != user.Email || loginRequest.Password != user.Password)
+            if (loginRequest.Email != user.Email || loginRequest.Password != user.Password)
             {
                 return Unauthorized();
             }
-            if (loginRequest.Username == user.Email && loginRequest.Password == user.Password)
+            if (loginRequest.Email == user.Email && loginRequest.Password == user.Password)
             {
                
               var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -46,6 +46,7 @@ namespace PitchMatch.Controllers
 
             return Ok(token);
             }
+            return BadRequest();
         }
     }
 }
