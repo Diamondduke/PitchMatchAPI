@@ -18,12 +18,14 @@ namespace PitchMatch.Controllers
         {
             _db = db;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _db.User.ToListAsync();
             return Ok(users);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetUser(int userId)
         {
