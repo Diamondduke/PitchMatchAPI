@@ -7,7 +7,6 @@ using PitchMatch.Securituy;
 
 namespace PitchMatch.Controllers
 {
-    //[Authorize]
     [Route("/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -26,6 +25,7 @@ namespace PitchMatch.Controllers
             return Ok(users);
         }
 
+        //[Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int userId)
         {
@@ -64,6 +64,7 @@ namespace PitchMatch.Controllers
             return CreatedAtAction(nameof(GetUser), new {id=newUser.Id},newUser);
         }
 
+        //[Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateUser(int id,UpdateUser user)
         {
@@ -85,6 +86,7 @@ namespace PitchMatch.Controllers
             return Ok();
         }
 
+        //[Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int id)
         {
