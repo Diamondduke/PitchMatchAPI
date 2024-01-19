@@ -7,13 +7,13 @@ namespace PitchMatch.Securituy
     public static class PasswordHasher
     {
 
-        public static string HashPassword(string unhashedPassword)
+        public static string HashPassword(string unhashedPasswordAndSalt)
         {
             // Create an instance of SHA-256
             using (var sha256 = SHA256.Create())
             {
                 // Convert the password to a byte array
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(unhashedPassword);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(unhashedPasswordAndSalt);
 
                 // Compute the hash
                 byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
