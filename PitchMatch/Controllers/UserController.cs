@@ -41,6 +41,11 @@ namespace PitchMatch.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUser user)
         {
+            if (ModelState.IsValid == false)
+            {
+                return ValidationProblem(ModelState);
+            }
+
             var generatedSalt = PasswordHasher.GenerateSalt();
 
             var newUser = new User
