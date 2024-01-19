@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PitchMatch.Data;
 using PitchMatch.Data.Models;
 using PitchMatch.Securituy;
+using System.ComponentModel.DataAnnotations;
 
 namespace PitchMatch.Controllers
 {
@@ -29,8 +30,8 @@ namespace PitchMatch.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int userId)
         {
-            var user= await _db.User.FindAsync(userId);
-            if(user == null)
+            var user = await _db.User.FindAsync(userId);
+            if (user == null)
             {
                 return NotFound();
             }
@@ -56,21 +57,21 @@ namespace PitchMatch.Controllers
                 PersonalData = null,
                 Pitches = null,
                 Investments = null,
-                Rating=0,
+                Rating = 0,
             };
 
             _db.User.Add(newUser);
             await _db.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUser), new {id=newUser.Id},newUser);
+            return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
         }
 
         //[Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(int id,UpdateUser user)
+        public async Task<IActionResult> UpdateUser(int id, UpdateUser user)
         {
             User? oldUser = await _db.User.FindAsync(id);
 
-            if(oldUser == null)
+            if (oldUser == null)
             {
                 return NotFound();
             }
@@ -91,31 +92,45 @@ namespace PitchMatch.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             User? user = await _db.User.FindAsync(id);
-            if(user == null)
+            if (user == null)
             {
                 return NotFound();
             }
             _db.User.Remove(user);
             await _db.SaveChangesAsync();
             return Ok();
-        }   
+        }
     }
 
     public class CreateUser
     {
+        [Required]
+        [MinLength(3)]
+        [MaxLength(100)]
         public string Name { get; set; } = string.Empty;
+        [Required]
+        [MinLength(3)]
+        [MaxLength(100)]
         public string Email { get; set; } = string.Empty;
+        [Required]
+        [MinLength(6)]
+        [MaxLength(300)]
         public string Password { get; set; } = string.Empty;
+        [MaxLength(2000)]
         public string? Bio { get; set; }
+        [MaxLength(300)]
         public string? Contact { get; set; }
+        [MaxLength(300)]
         public string? SoMe { get; set; }
+        [MaxLength(300)]
         public string? ImgUrl { get; set; }
+        [MaxLength(300)]
         public string? CvUrl { get; set; }
 
     }
 
     public class UpdateUser
-    { 
+    {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
