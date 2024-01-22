@@ -120,7 +120,7 @@ namespace PitchMatch.Controllers
         [Required(ErrorMessage = "A yield is required")]
         [Range(0, 10000000000, ErrorMessage = "Yield must be between 100 and 10000000000")]
         public decimal Yield { get; set; }
-        [Required(ErrorMessage = "A category is required")]
+        
         public string Categories { get; set; } = string.Empty;
     }
 }
