@@ -51,7 +51,7 @@ namespace PitchMatch.Controllers
 
             await _db.SaveChangesAsync();
 
-            return Ok();
+            return Ok(user.PersonalData);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateDataPersonal(CreatePersonalData personalData)
@@ -75,7 +75,7 @@ namespace PitchMatch.Controllers
             };
 
             await _db.SaveChangesAsync();
-            return Ok();
+            return Ok(data);
         }
         [HttpDelete]
         public async Task<IActionResult> DeletePersonal(int userId)
