@@ -30,9 +30,9 @@ namespace PitchMatch.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonalData(int id, CreatePersonalData newPersonalData)
+        public async Task<IActionResult> CreatePersonalData(CreatePersonalData newPersonalData)
         {
-            User? userPersonalData = await _db.User.FindAsync(id);
+           User? userPersonalData = await _db.User.FindAsync(newPersonalData.UserId);
 
             if (userPersonalData == null)
             {
