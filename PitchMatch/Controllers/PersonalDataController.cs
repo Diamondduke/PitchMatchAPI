@@ -54,9 +54,9 @@ namespace PitchMatch.Controllers
             return Ok();
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateDataPersonal(int userId, CreatePersonalData personalData)
+        public async Task<IActionResult> UpdateDataPersonal(CreatePersonalData personalData)
         {
-            User? user = await _db.User.FindAsync(userId);
+            User? user = await _db.User.FindAsync(personalData.UserId);
 
             if (user == null)
             {
@@ -71,7 +71,7 @@ namespace PitchMatch.Controllers
                 Longitude = personalData.Longitude,
                 Latitude = personalData.Latitude,
                 IsVerified = personalData.IsVerified,
-                UserId = userId
+                UserId = personalData.UserId
             };
 
             await _db.SaveChangesAsync();
@@ -80,15 +80,14 @@ namespace PitchMatch.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeletePersonal(int userId)
         {
-            User? userPersonalData = await _db.User.FindAsync(userId);
+            User? user = await _db.User.FindAsync(userId);
 
-            if (userPersonalData == null || userPersonalData.PersonalData == null)
+            if (user == null || user.PersonalData == null)
             {
                 return NotFound();
             }
-            //userPersonalData.PersonalData = null;
-            _db.PersonalData.Remove(userPersonalData.PersonalData);
 
+            _db.PersonalData.Remove(user.PersonalData);
             await _db.SaveChangesAsync();
             return Ok();
         }
