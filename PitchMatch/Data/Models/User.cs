@@ -30,6 +30,8 @@ namespace PitchMatch.Data.Models
         public string? CvUrl { get; set; }
         public string Salt { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public int Rating { get; set; }
         public PersonalData? PersonalData { get; set; }
         public ICollection<Pitch>? Pitches { get; set; }
