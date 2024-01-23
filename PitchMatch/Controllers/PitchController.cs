@@ -36,6 +36,7 @@ namespace PitchMatch.Controllers
             }
             return Ok(pitch);
         }
+        
         //[Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePitch(CreatePitch pitch)

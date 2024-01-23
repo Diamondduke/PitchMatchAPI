@@ -26,6 +26,17 @@ namespace PitchMatch.Controllers
             return Ok(users);
         }
 
+        [HttpGet("/{id:int}/portfolio")]
+        public async Task<IActionResult> GetUserPortfolio(int id)
+        {  
+            List<Pitch>? pitches= await _db.Pitch.Where(p => p.UserId == id).ToListAsync();
+            if (pitches == null)
+            {
+                return NotFound();
+            }
+            return Ok(pitches);
+        }
+
         //[Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int id)
