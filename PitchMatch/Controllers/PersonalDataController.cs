@@ -56,14 +56,14 @@ namespace PitchMatch.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateDataPersonal(CreatePersonalData personalData)
         {
-            User? user = await _db.User.FindAsync(personalData.UserId);
+            PersonalData? data = await _db.PersonalData.Where((d) => d.UserId == personalData.UserId).FirstOrDefaultAsync();
 
-            if (user == null)
+            if (data == null)
             {
                 return NotFound();
             }
 
-            user.PersonalData = new PersonalData
+            data = new PersonalData
             {
                 PhoneNumber = personalData.PhoneNumber,
                 PersonNr = personalData.PersonNr,
@@ -80,14 +80,14 @@ namespace PitchMatch.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeletePersonal(int userId)
         {
-            User? user = await _db.User.FindAsync(userId);
+            PersonalData? data = await _db.PersonalData.Where((d)=> d.UserId == userId).FirstOrDefaultAsync();
 
-            if (user == null || user.PersonalData == null)
+            if (data == null)
             {
                 return NotFound();
             }
 
-            _db.PersonalData.Remove(user.PersonalData);
+            _db.PersonalData.Remove(data);
             await _db.SaveChangesAsync();
             return Ok();
         }
