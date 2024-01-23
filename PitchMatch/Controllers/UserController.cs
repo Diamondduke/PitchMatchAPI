@@ -38,6 +38,21 @@ namespace PitchMatch.Controllers
             return Ok(user);
         }
 
+        [HttpGet("{userId:int}/pitches")]
+        public async Task<IActionResult> GetUserPitches(int userId)
+        {
+            var userWithPitches = await _db.User
+                                           .Include(u => u.Pitches)
+                                           .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (userWithPitches == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok(userWithPitches.Pitches);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUser user)
         {
