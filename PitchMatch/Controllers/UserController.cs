@@ -30,7 +30,7 @@ namespace PitchMatch.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user= await _db.User.FindAsync(id);
+            var user = await _db.User.Where(u => u.Id == id).Include(u => u.Pitches).FirstOrDefaultAsync();
             if(user == null)
             {
                 return NotFound();
