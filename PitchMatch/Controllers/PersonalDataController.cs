@@ -52,9 +52,9 @@ namespace PitchMatch.Controllers
             return Ok();
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateDataPersonal(int userId,CreatePersonalData user)
+        public async Task<IActionResult> UpdateDataPersonal(CreatePersonalData user)
         {
-            User? userPersonalData = await _db.User.FindAsync(userId);
+            User? userPersonalData = await _db.User.FindAsync(user.UserId);
 
             if (userPersonalData == null)
             {
@@ -67,7 +67,7 @@ namespace PitchMatch.Controllers
                     PersonNr = user.PersonNr,
                     Address = user.Address,
                     IsVerified = user.IsVerified,
-                    UserId = userId
+                    UserId = user.UserId
                 };
 
             await _db.SaveChangesAsync();
@@ -102,8 +102,7 @@ namespace PitchMatch.Controllers
         [MinLength(11, ErrorMessage = "Personal number must be at least 11 digits.")]
         [MaxLength(11, ErrorMessage = "Personal number must be at most 11 digits.")]
         public string? PersonNr { get; set; }
-       
-        [MinLength(20, ErrorMessage = "Address must be at least 20 digits.")]
+
         public string? Address { get; set; }
 
         public bool IsVerified { get; set; }
