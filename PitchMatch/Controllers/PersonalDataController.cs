@@ -100,15 +100,13 @@ public class CreatePersonalData
     [MaxLength(8, ErrorMessage = "Phone number must be at most 8 digits.")]
     public string? PhoneNumber { get; set; }
 
-    [MinLength(11, ErrorMessage = "Personal number must be at least 11 digits.")]
-    [MaxLength(11, ErrorMessage = "Personal number must be at most 11 digits.")]
-    public string? PersonNr { get; set; }
+        [MinLength(11, ErrorMessage = "Personal number must be at least 11 digits.")]
+        [MaxLength(11, ErrorMessage = "Personal number must be at most 11 digits.")]
+        public string? PersonNr { get; set; }
 
-    [MinLength(20, ErrorMessage = "Address must be at least 20 digits.")]
-    public string? Address { get; set; }
-    public double Longitude { get; set; }
-    public double Latitude { get; set; }
-    public bool IsVerified { get; set; }
+        public string? Address { get; set; }
+
+        public bool IsVerified { get; set; }
 
     public int UserId { get; set; }
 }
