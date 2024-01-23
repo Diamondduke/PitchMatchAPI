@@ -29,7 +29,6 @@ namespace PitchMatch.Data.Models
         [MaxLength(300, ErrorMessage = "We don't have space for that much information! 300 character limit.")]
         public string? CvUrl { get; set; }
         public string Salt { get; set; } = string.Empty;
-        public string Location { get; set; } = string.Empty;
         public int Rating { get; set; }
         public PersonalData? PersonalData { get; set; }
         public ICollection<Pitch>? Pitches { get; set; }

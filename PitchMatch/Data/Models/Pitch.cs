@@ -23,6 +23,8 @@ namespace PitchMatch.Data.Models
         public string? VideoUrl { get; set; }
         [Required(ErrorMessage ="A location is required")]
         public string Location { get; set; } = string.Empty;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         [Required(ErrorMessage = "A goal capital is required")]
         [Range(0, 10000000000, ErrorMessage = "Goal capital must be between 100 and 10000000000")]
         public decimal Goal { get; set; }

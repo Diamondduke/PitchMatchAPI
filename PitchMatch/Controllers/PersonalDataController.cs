@@ -21,69 +21,73 @@ namespace PitchMatch.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPersonalData(int id)
         {
-            PersonalData? userPersonalData = await _db.PersonalData.Where(p=>p.UserId == id).FirstOrDefaultAsync(); 
-            if (userPersonalData == null)
+            PersonalData? personalData = await _db.PersonalData.Where(p => p.UserId == id).FirstOrDefaultAsync();
+            if (personalData == null)
             {
                 return NotFound();
             }
-            return Ok(userPersonalData);
+            return Ok(personalData);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePersonalData(int id, CreatePersonalData newPersonalData)
+        public async Task<IActionResult> CreatePersonalData(CreatePersonalData newPersonalData)
         {
-            User? userPersonalData = await _db.User.FindAsync(id);
+            User? user = await _db.User.FindAsync(newPersonalData.UserId);
 
-            if (userPersonalData == null)
+            if (user == null)
             {
                 return NotFound();
             }
-            userPersonalData.PersonalData = new PersonalData
+            user.PersonalData = new PersonalData
             {
                 PhoneNumber = newPersonalData.PhoneNumber,
                 PersonNr = newPersonalData.PersonNr,
                 Address = newPersonalData.Address,
-                IsVerified =newPersonalData.IsVerified,
+                Longitude = newPersonalData.Longitude,
+                Latitude = newPersonalData.Latitude,
+                IsVerified = newPersonalData.IsVerified,
                 UserId = newPersonalData.UserId
             };
 
             await _db.SaveChangesAsync();
 
-            return Ok();
+            return Ok(user.PersonalData);
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateDataPersonal(int userId,CreatePersonalData user)
+        public async Task<IActionResult> UpdateDataPersonal(CreatePersonalData personalData)
         {
-            User? userPersonalData = await _db.User.FindAsync(userId);
+            PersonalData? data = await _db.PersonalData.Where((d) => d.UserId == personalData.UserId).FirstOrDefaultAsync();
 
-            if (userPersonalData == null)
+            if (data == null)
             {
                 return NotFound();
             }
 
-           userPersonalData.PersonalData = new PersonalData
-                {
-                    PhoneNumber = user.PhoneNumber,
-                    PersonNr = user.PersonNr,
-                    Address = user.Address,
-                    IsVerified = user.IsVerified,
-                    UserId = userId
-                };
+            data = new PersonalData
+            {
+                PhoneNumber = personalData.PhoneNumber,
+                PersonNr = personalData.PersonNr,
+                Address = personalData.Address,
+                Longitude = personalData.Longitude,
+                Latitude = personalData.Latitude,
+                IsVerified = personalData.IsVerified,
+                UserId = personalData.UserId
+            };
 
             await _db.SaveChangesAsync();
-            return Ok();
+            return Ok(data);
         }
         [HttpDelete]
         public async Task<IActionResult> DeletePersonal(int userId)
         {
-            User? userPersonalData = await _db.User.FindAsync(userId);
+            PersonalData? data = await _db.PersonalData.Where((d)=> d.UserId == userId).FirstOrDefaultAsync();
 
-            if (userPersonalData == null)
+            if (data == null)
             {
                 return NotFound();
             }
-            userPersonalData.PersonalData = null;
 
+            _db.PersonalData.Remove(data);
             await _db.SaveChangesAsync();
             return Ok();
         }
@@ -91,23 +95,21 @@ namespace PitchMatch.Controllers
 
 }
 
-    public class CreatePersonalData
-    {
-     
+public class CreatePersonalData
+{
+    [MinLength(8, ErrorMessage = "Phone number must be at least 8 digits.")]
+    [MaxLength(8, ErrorMessage = "Phone number must be at most 8 digits.")]
+    public string? PhoneNumber { get; set; }
 
-        [MinLength(8, ErrorMessage = "Phone number must be at least 8 digits.")]
-        [MaxLength(8, ErrorMessage = "Phone number must be at most 8 digits.")]
-        public string? PhoneNumber { get; set; }
+    [MinLength(11, ErrorMessage = "Personal number must be at least 11 digits.")]
+    [MaxLength(11, ErrorMessage = "Personal number must be at most 11 digits.")]
+    public string? PersonNr { get; set; }
 
-        [MinLength(11, ErrorMessage = "Personal number must be at least 11 digits.")]
-        [MaxLength(11, ErrorMessage = "Personal number must be at most 11 digits.")]
-        public string? PersonNr { get; set; }
-       
-        [MinLength(20, ErrorMessage = "Address must be at least 20 digits.")]
-        public string? Address { get; set; }
+    public string? Address { get; set; }
+    public double Longitude { get; set; }
+    public double Latitude { get; set; }
+    public bool IsVerified { get; set; }
 
-        public bool IsVerified { get; set; }
-
-        public int UserId { get; set; }
-    }
+    public int UserId { get; set; }
+}
 

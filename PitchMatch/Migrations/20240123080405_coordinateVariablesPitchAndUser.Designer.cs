@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PitchMatch.Data;
 
@@ -11,9 +12,11 @@ using PitchMatch.Data;
 namespace PitchMatch.Migrations
 {
     [DbContext(typeof(PitchMatchDbContext))]
-    partial class PitchMatchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240123080405_coordinateVariablesPitchAndUser")]
+    partial class coordinateVariablesPitchAndUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,12 +64,6 @@ namespace PitchMatch.Migrations
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("float");
 
                     b.Property<string>("PersonNr")
                         .HasColumnType("nvarchar(max)");
@@ -178,6 +175,16 @@ namespace PitchMatch.Migrations
                     b.Property<string>("ImgUrl")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
