@@ -143,6 +143,7 @@ namespace PitchMatch.Controllers
         public decimal Yield { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
+        //hei
         public string Categories { get; set; } = string.Empty;
     }
 }
