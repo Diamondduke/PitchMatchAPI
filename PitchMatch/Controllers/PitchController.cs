@@ -30,6 +30,7 @@ namespace PitchMatch.Controllers
         public async Task<IActionResult> GetPitch(int pitchId)
         {
             var pitch = await _db.Pitch
+                                 .Include(p => p.User)
                                  .Include(p => p.Investments)
                                  .FirstOrDefaultAsync(p => p.Id == pitchId);
             if (pitch == null)
