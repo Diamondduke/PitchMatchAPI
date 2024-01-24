@@ -22,7 +22,9 @@ namespace PitchMatch.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _db.User.ToListAsync();
+            //var users = await _db.User.ToListAsync();
+
+            var users = await _db.User.Include(u => u.PersonalData).Include(u => u.Pitches).ToListAsync();
             return Ok(users);
         }
 
@@ -41,11 +43,18 @@ namespace PitchMatch.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _db.User.FindAsync(id);
-            if(user == null)
+            var user = await _db.User
+                .Include(u => u.PersonalData) // Include the PersonalData navigation property
+                .Include(u => u.Pitches)      // Include the Pitches navigation property
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
             {
+                // User with the given ID was not found
                 return NotFound();
             }
+
+            // User found, return it as JSON
             return Ok(user);
         }
 

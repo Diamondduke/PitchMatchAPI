@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PitchMatch.Data;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace PitchMatch
 {
@@ -32,7 +33,10 @@ namespace PitchMatch
             //Jwt configuration ends here
          
             builder.Services.AddCors();
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions((c) =>
+            {
+                c.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
