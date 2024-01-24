@@ -51,7 +51,7 @@ namespace PitchMatch.Controllers
 
             return Ok(investment);
         }
--
+
         [HttpGet("pitch/{pitchId:int}")]
         public async Task<IActionResult> GetInvestmentsForPitch(int pitchId)
         {
