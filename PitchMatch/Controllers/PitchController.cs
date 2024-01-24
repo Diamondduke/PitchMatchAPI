@@ -49,6 +49,8 @@ namespace PitchMatch.Controllers
                 ImgUrl = pitch.ImgUrl,
                 VideoUrl = pitch.VideoUrl,
                 Location = pitch.Location,
+                Latitude = pitch.Latitude,
+                Longitude = pitch.Longitude,
                 Goal = pitch.Goal,
                 Yield = pitch.Yield,
                 Categories = pitch.Categories,
@@ -75,6 +77,8 @@ namespace PitchMatch.Controllers
             oldPitch.ImgUrl = pitch.ImgUrl;
             oldPitch.VideoUrl = pitch.VideoUrl;
             oldPitch.Location = pitch.Location;
+            oldPitch.Latitude = pitch.Latitude;
+            oldPitch.Longitude = pitch.Longitude;
             oldPitch.Goal = pitch.Goal;
             oldPitch.Yield = pitch.Yield;
             oldPitch.Categories = pitch.Categories;
@@ -121,7 +125,8 @@ namespace PitchMatch.Controllers
         [Required(ErrorMessage = "A yield is required")]
         [Range(0, 10000000000, ErrorMessage = "Yield must be between 100 and 10000000000")]
         public decimal Yield { get; set; }
-        
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
         public string Categories { get; set; } = string.Empty;
     }
 }
