@@ -29,14 +29,33 @@ namespace PitchMatch.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPitch(int pitchId)
         {
-            var pitch = await _db.Pitch.FindAsync(pitchId);
-            if(pitch == null)
+            var pitch = await _db.Pitch
+                                 .Include(p => p.User)
+                                 .Include(p => p.Investments)
+                                 .FirstOrDefaultAsync(p => p.Id == pitchId);
+            if (pitch == null)
             {
                 return NotFound();
             }
             return Ok(pitch);
         }
-        
+
+        //[Authorize]
+        [HttpGet("{pitchId:int}/Investment")]
+        public async Task<IActionResult> GetInvestmentsForPitch(int pitchId)
+        {
+            var pitch = await _db.Pitch
+                                 .Include(p => p.Investments)
+                                 .FirstOrDefaultAsync(p => p.Id == pitchId);
+
+            if (pitch == null)
+            {
+                return NotFound("Pitch not found.");
+            }
+
+            return Ok(pitch.Investments);
+        }
+
         //[Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePitch(CreatePitch pitch)
