@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PitchMatch", "PitchMatch\PitchMatch.csproj", "{209CCA1A-005A-47B9-9CA7-CF84A3377606}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PitchMatch", "PitchMatch\PitchMatch.csproj", "{209CCA1A-005A-47B9-9CA7-CF84A3377606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PitchMatchUnitTests", "PitchMatchUnitTests\PitchMatchUnitTests.csproj", "{CA1141FB-F655-415A-BAF8-E9B7A2E70DFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{209CCA1A-005A-47B9-9CA7-CF84A3377606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{209CCA1A-005A-47B9-9CA7-CF84A3377606}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{209CCA1A-005A-47B9-9CA7-CF84A3377606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1141FB-F655-415A-BAF8-E9B7A2E70DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1141FB-F655-415A-BAF8-E9B7A2E70DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1141FB-F655-415A-BAF8-E9B7A2E70DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1141FB-F655-415A-BAF8-E9B7A2E70DFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
