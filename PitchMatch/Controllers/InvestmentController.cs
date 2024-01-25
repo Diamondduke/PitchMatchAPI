@@ -58,7 +58,12 @@ namespace PitchMatch.Controllers
             var investments = await _db.Investment
                                        .Where(i => i.PitchId == pitchId)
                                        .ToListAsync();
+            if (investments == null)
+            {
+                return NotFound();
+            }
             return Ok(investments);
+            
         }
     }
 }
