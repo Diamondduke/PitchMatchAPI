@@ -116,7 +116,10 @@ namespace PitchMatch.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            User? user = await _db.User.FindAsync(id);
+            User? user = await _db.User.Include(u => u.PersonalData)
+                                        .Include(u => u.Pitches)
+                                        .Include(u => u.Investments)
+                                        .FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 return NotFound();
