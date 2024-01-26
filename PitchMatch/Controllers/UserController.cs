@@ -109,7 +109,7 @@ namespace PitchMatch.Controllers
             oldUser.Contact = user.Contact;
             oldUser.CvUrl = user.CvUrl;
             await _db.SaveChangesAsync();
-            return Ok();
+            return Ok(oldUser);
         }
 
         //[Authorize]
