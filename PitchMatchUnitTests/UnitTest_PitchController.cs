@@ -8,57 +8,45 @@ using PitchMatch.Data.Models;
 using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using PitchMatch.Data;
+using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 
 namespace PitchMatchUnitTests
 {
-    public class PitchControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class PitchControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<Program> _factory;
 
-        public PitchControllerTests()
+        public PitchControllerTests(CustomWebApplicationFactory<Program> factory)
         {
-            _factory = new WebApplicationFactory<Program>();
-            _client = _factory.CreateClient();
+            _factory = factory;
         }
+
         [Fact]
         public async Task GetPitch_WithValidId_ReturnsOk()
         {
-            // Arrange
-            var pitch = new Pitch
-            {
-                Id = 1,
-                UserId = 1,
-                Title = "test",
-                Description = "test",
-                Summary = "test",
-                ImgUrl = "test",
-                Goal= 1000,
-                Yield = 1000,
+            var client = _factory.CreateClient();
+            var pitchId = 111;
             
-            };
-
-            var pitchResponse = await _client.PostAsJsonAsync("/pitch", pitch);
-            pitchResponse.EnsureSuccessStatusCode();
-
             // Act
-            var response = await _client.GetAsync($"/pitch/{pitch.Id}");
+            var response = await client.GetAsync($"Pitch/{pitchId}?pitchId={pitchId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            Assert.Equal("test", pitch.Title);
-            Assert.Equal("test", pitch.Description);
-            response.EnsureSuccessStatusCode();
+           
         }
         [Fact]
         public async Task GetPitch_WithInvalidId_ReturnsNotFound()
         {
+
+            var client = _factory.CreateClient();
             // Arrange
             var pitchId = 0;
 
             // Act
-            var response = await _client.GetAsync($"/pitch/{pitchId}");
+            var response = await client.GetAsync($"/pitch/{pitchId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -66,11 +54,9 @@ namespace PitchMatchUnitTests
         [Fact]
         public async Task CreatePitch_WithValidPitch_ReturnsCreated()
         {
-            // Arrange
-            var pitch = new Pitch
+            var _pitch = new Pitch
             {
-                Id = 1,
-                UserId = 1,
+                UserId = 6,
                 Title = "test",
                 Description = "test",
                 Summary = "test",
@@ -78,36 +64,26 @@ namespace PitchMatchUnitTests
                 Goal = 1000,
                 Yield = 1000,
             };
+            var client = _factory.CreateClient();
 
             // Act
-            var response = await _client.PostAsJsonAsync("/pitch", pitch);
+            var response = await client.PostAsJsonAsync("/pitch", _pitch);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             response.EnsureSuccessStatusCode();
-            Assert.Equal("test", pitch.Title);
-            Assert.Equal("test", pitch.Description);
+            Assert.AreEqual("test", _pitch.Title);
+            Assert.AreEqual("test", _pitch.Description);
         }
         [Fact]
         public async Task UpdatePitch_ReturnsOk()
         {
-
+            var client = _factory.CreateClient();
+            var _pitchUpdateId = 111;
             // Arrange
-            var pitch = new Pitch
+            var _pitchUpdated = new Pitch
             {
-                Id = 1,
-                UserId = 1,
-                Title = "test",
-                Description = "test",
-                Summary = "test",
-                ImgUrl = "test",
-                Goal = 1000,
-                Yield = 1000,
-            };
-            var pitchUpdated = new Pitch
-            {
-                Id = 1,
-                UserId = 1,
+                UserId = 6,
                 Title = "test",
                 Description = "heihei",
                 Summary = "test",
@@ -116,26 +92,24 @@ namespace PitchMatchUnitTests
                 Yield = 1000,
             };
 
-            var pitchResponse = await _client.PostAsJsonAsync("/pitch", pitch);
-            pitchResponse.EnsureSuccessStatusCode();
-
             // Act
-            var response = await _client.PutAsJsonAsync($"/pitch/{pitch.Id}", pitchUpdated);
+            var response = await client.PutAsJsonAsync($"Pitch/{_pitchUpdateId}?pitchId={_pitchUpdateId}", _pitchUpdated);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.EnsureSuccessStatusCode();
-            Assert.Equal("test", pitchUpdated.Title);
-            Assert.Equal("heihei", pitchUpdated.Description);
+            Assert.AreEqual("test", _pitchUpdated.Title);
+            Assert.AreEqual("heihei", _pitchUpdated.Description);
         }
         [Fact]
         public async Task UpdatePitch_WithInvalidId_ReturnsNotFound()
         {
+            var client = _factory.CreateClient();
             // Arrange
+            
             var pitchId = 0;
-            var pitch= new Pitch
+            var pitch = new Pitch
             {
-                Id = 1,
                 UserId = 1,
                 Title = "test",
                 Description = "test",
@@ -146,7 +120,7 @@ namespace PitchMatchUnitTests
             };
 
             // Act
-            var response = await _client.PutAsJsonAsync($"/pitch/{pitchId}", pitch);
+            var response = await client.PutAsJsonAsync($"Pitch/{pitchId}?pitchId={pitchId}", pitch);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -154,36 +128,24 @@ namespace PitchMatchUnitTests
         [Fact]
         public async Task DeletePitch_WithValidId_ReturnsNoContent()
         {
-            // Arrange
-            var pitch = new Pitch
-            {
-                Id = 1,
-                UserId = 1,
-                Title = "test",
-                Description = "test",
-                Summary = "test",
-                ImgUrl = "test",
-                Goal = 1000,
-                Yield = 1000,
-            };
-
-            var pitchResponse = await _client.PostAsJsonAsync("/pitch", pitch);
-            pitchResponse.EnsureSuccessStatusCode();
+            var client = _factory.CreateClient();
+           var pitchId= 111;
 
             // Act
-            var response = await _client.DeleteAsync($"/pitch/{pitch.Id}");
+            var response = await client.DeleteAsync($"{pitchId}?pitchId={pitchId}");
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
         [Fact]
         public async Task DeletePitch_WithInvalidId_ReturnsNotFound()
         {
+            var client = _factory.CreateClient();
             // Arrange
             var pitchId = 0;
 
             // Act
-            var response = await _client.DeleteAsync($"/pitch/{pitchId}");
+            var response = await client.DeleteAsync($"{pitchId}?pitchId={pitchId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);

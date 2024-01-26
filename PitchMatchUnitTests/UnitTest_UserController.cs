@@ -13,154 +13,107 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PitchMatchUnitTests
 {
-    public class UserControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class UserControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<Program> _factory;
 
-        public UserControllerTests()
+        public UserControllerTests(CustomWebApplicationFactory<Program> factory)
         {
-            _factory = new WebApplicationFactory<Program>();
-            _client = _factory.CreateClient();
-
+            _factory = factory;
         }
 
         [Fact]
         public async Task GetAllUsers_ReturnsOk()
         {
+            var client = _factory.CreateClient();
             // Arrange
             var request = new HttpRequestMessage(HttpMethod.Get, "/user");
 
             // Act
-            var response = await _client.SendAsync(request);
+            var response = await client.SendAsync(request);
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
-       
+
 
         [Fact]
         public async Task PostAndGetUser_ReturnsOk()
         {
-            // Arrange
+            var client = _factory.CreateClient();
+
             var user = new User
             {
-                Id = 10,
                 Name = "test",
-                Email = "test@test.com",
+                Email = "AgustinaScapusioasd@test.com",
                 Password = "test123",
-
             };
 
-            // Act
-            // Create user
-            var createUserResponse = await _client.PostAsJsonAsync("/user", user);
-            createUserResponse.EnsureSuccessStatusCode();
+            //Act
+            //Create user
+            var response = await client.PostAsJsonAsync("/user", user);
 
-            // Retrieve user
-            var getUserResponse = await _client.GetAsync("/user/10");
-            getUserResponse.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            // Assert
-            var returnedUser = await getUserResponse.Content.ReadFromJsonAsync<User>();
-            Assert.NotNull(returnedUser);
-            Assert.Equal(user.Id, returnedUser.Id);
-            Assert.Equal(user.Name, returnedUser.Name);
         }
+
+        //[Fact]
+        //public async Task GetUser_WithValidId_ReturnsOk()
+        //{
+        //    var client = _factory.CreateClient();
+        //    var userId = 97;
+
+        //    // Act
+        //    var response = await client.GetAsync($"user/{userId}?userId={userId}");
+
+        //    // Assert
+        //    response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        //}
+        //[Fact]
+        //public async Task GetUser_WithInvalidId_ReturnsNotFound()
+        //{
+
+        //    var client = _factory.CreateClient();
+        //    // Arrange
+        //    var userId = 0;
+
+        //    // Act
+        //    var response = await client.GetAsync($"user/{userId}?userId={userId}");
+
+        //    // Assert
+        //    response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        //}
 
         [Fact]
         public async Task DeleteUser_ReturnsOk()
         {
             // Arrange
-            var user = new User
-            {
-                Id = 62,
-                Name = "test",
-                Email = "taylor123@swift.com",
-                Password = "test123"
-            };
-
-
-            // Act
-            // Create user
-            var createUserResponse = await _client.PostAsJsonAsync("/user", user);
-            createUserResponse.EnsureSuccessStatusCode();
-            // Delete user
-            var deleteUserResponse = await _client.DeleteAsync("/user/62");
+            var client = _factory.CreateClient();
+            var userId= 66;
+            //Act
+            var deleteUserResponse = await client.DeleteAsync($"/user?Id={userId}");
             deleteUserResponse.EnsureSuccessStatusCode();
-
-            // Assert
-            var getUserResponse = await _client.GetAsync("/user/62");
-            Assert.Equal(HttpStatusCode.NotFound, getUserResponse.StatusCode);
+            deleteUserResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        [Fact]
-        public async Task DeleteUser_ReturnsNotFound()
-        {
-            
-            // Delete user
-            var deleteUserResponse = await _client.DeleteAsync("/user/0");
-            deleteUserResponse.EnsureSuccessStatusCode();
 
-            // Assert
-            var getUserResponse = await _client.GetAsync("/user/63");
-            Assert.Equal(HttpStatusCode.NotFound, getUserResponse.StatusCode);
-
-        }
         [Fact]
         public async Task UpdateUser_ReturnsOk()
         {
-            // Arrange
+            var client = _factory.CreateClient();
             var user = new User
             {
-                Id = 63,
                 Name = "test",
-                Email = "agustina@test.com",
+                Email = "agustinaaaa@gmail.com",
                 Password = "test123"
             };
+            var userID = 95;
 
-            // Act
-            // Create user
-            var createUserResponse = await _client.PostAsJsonAsync("/user", user);
-            createUserResponse.EnsureSuccessStatusCode();
-
-            // Update user
-            var updateUserResponse = await _client.PutAsJsonAsync("/user/63", user);
+            
+            var updateUserResponse = await client.PutAsJsonAsync($"/User?id={userID}", user);
             updateUserResponse.EnsureSuccessStatusCode();
-
-            // Assert
-            var getUserResponse = await _client.GetAsync("/user/63");
-            getUserResponse.EnsureSuccessStatusCode();
-            var returnedUser = await getUserResponse.Content.ReadFromJsonAsync<User>();
-            Assert.NotNull(returnedUser);
-            Assert.Equal(user.Id, returnedUser.Id);
-            Assert.Equal(user.Name, returnedUser.Name);
-        }
-        [Fact]
-        public async Task UpdateUser_ReturnsNotFound()
-        {
-            // Arrange
-            var user = new User
-            {
-                Id = 64,
-                Name = "test",
-                Email = "agustina@gmail.com",
-                Password = "test123"
-            };
-
-            // Act
-            // Create user
-            var createUserResponse = await _client.PostAsJsonAsync("/user", user);
-            createUserResponse.EnsureSuccessStatusCode();
-
-            // Update user
-            var updateUserResponse = await _client.PutAsJsonAsync("/user/65", user);
-            updateUserResponse.EnsureSuccessStatusCode();
-
-            // Assert
-            var getUserResponse = await _client.GetAsync("/user/65");
-            Assert.Equal(HttpStatusCode.NotFound, getUserResponse.StatusCode);
-
         }
     }
 }

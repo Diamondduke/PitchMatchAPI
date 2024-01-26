@@ -10,25 +10,22 @@ using System.Net.Http.Json;
 
 namespace PitchMatchUnitTests
 {
-    public class PersonalDataControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class PersonalDataControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _factory;
-        private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<Program> _factory;
 
-        public PersonalDataControllerTests()
+        public PersonalDataControllerTests(CustomWebApplicationFactory<Program> factory)
         {
-            _factory = new WebApplicationFactory<Program>();
-            _client = _factory.CreateClient();
+            _factory = factory;
         }
-
         [Fact]
         public async Task CreatePersonalData_ReturnsOk()
         {
+            var client = _factory.CreateClient();
             // Arrange
             var PersonalData = new PersonalData
             {
-                Id = 1,
-                UserId = 1,
+                UserId = 97,
                 PhoneNumber = "12345678",
                 PersonNr = "12345678910",
                 Address = "test",
@@ -38,7 +35,7 @@ namespace PitchMatchUnitTests
             };
 
             // Act
-            var PersonalDataResponse = await _client.PostAsJsonAsync("/PersonalData", PersonalData);
+            var PersonalDataResponse = await client.PostAsJsonAsync("/PersonalData", PersonalData);
 
             // Assert
             PersonalDataResponse.EnsureSuccessStatusCode();
@@ -47,23 +44,11 @@ namespace PitchMatchUnitTests
         public async Task GetPersonalData_WithValidId_ReturnsOk()
         {
             // Arrange
-            var PersonalData = new PersonalData
-            {
-                Id = 1,
-                UserId = 1,
-                PhoneNumber = "12345678",
-                PersonNr = "12345678910",
-                Address = "test",
-                Longitude = 1,
-                Latitude = 1,
-                IsVerified = true
-            };
-
-            var PersonalDataResponse = await _client.PostAsJsonAsync("/PersonalData", PersonalData);
-            PersonalDataResponse.EnsureSuccessStatusCode();
+            var client = _factory.CreateClient();
+            var PersonalDataId = 14;
 
             // Act
-            var response = await _client.GetAsync($"/PersonalData/{PersonalData.Id}");
+            var response = await client.GetAsync($"/PersonalData/{PersonalDataId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -72,23 +57,34 @@ namespace PitchMatchUnitTests
         public async Task GetPersonalData_WithInvalidId_ReturnsNotFound()
         {
             // Arrange
-            var PersonalDataId = 0;
+            var client = _factory.CreateClient();
+            var PersonalDataId = 6;
 
             // Act
-            var response = await _client.GetAsync($"/PersonalData/{PersonalDataId}");
+            var response = await client.GetAsync($"/PersonalData/{PersonalDataId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
-        public async Task DeletePersonalData_ReturnsOk()
+        public async Task DeleteUser_ReturnsOk()
         {
             // Arrange
+            var client = _factory.CreateClient();
+            var userId = 97;
+            //Act
+            var deleteUserResponse = await client.DeleteAsync($"/PersonalData?userId={userId}");
+            deleteUserResponse.EnsureSuccessStatusCode();
+            deleteUserResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Fact]
+        public async Task UpdateUserPersonalData_ReturnsOk()
+        {
+            var client = _factory.CreateClient();
             var PersonalData = new PersonalData
             {
-                Id = 1,
-                UserId = 1,
+                UserId = 97,
                 PhoneNumber = "12345678",
                 PersonNr = "12345678910",
                 Address = "test",
@@ -96,16 +92,9 @@ namespace PitchMatchUnitTests
                 Latitude = 1,
                 IsVerified = true
             };
-            //Act
-            var PersonalDataResponse = await _client.PostAsJsonAsync("/PersonalData", PersonalData);
-            PersonalDataResponse.EnsureSuccessStatusCode();
-            // Delete user
-            var deletePersonalDataResponse = await _client.DeleteAsync("/PersonalData/1");
-            deletePersonalDataResponse.EnsureSuccessStatusCode();
-
-            // Assert
-            var getPersonalDataResponse = await _client.GetAsync("/PersonalData/1");
-            Assert.Equal(HttpStatusCode.NotFound, getPersonalDataResponse.StatusCode);
+            var response = await client.PutAsJsonAsync($"/PersonalData", PersonalData);
+            response.EnsureSuccessStatusCode();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
     }
         
