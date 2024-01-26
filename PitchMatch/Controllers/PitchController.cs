@@ -103,7 +103,7 @@ namespace PitchMatch.Controllers
             oldPitch.Categories = pitch.Categories;
 
             await _db.SaveChangesAsync();
-            return NoContent();
+            return Ok(oldPitch);
         }
         //[Authorize]
         [HttpDelete("{id:int}")]
